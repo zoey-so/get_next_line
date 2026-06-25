@@ -6,7 +6,7 @@
 /*   By: smilch <smilch@student.42warsaw.pl>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/06/24 15:43:59 by smilch            #+#    #+#             */
-/*   Updated: 2026/06/25 16:05:59 by smilch           ###   ########.fr       */
+/*   Updated: 2026/06/25 19:54:45 by smilch           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,20 +14,24 @@
 # define GET_NEXT_LINE_H
 
 # include <stdlib.h>
+# include <unistd.h>
 
 # ifndef BUFFER_SIZE
 #  define BUFFER_SIZE 2048
 # endif
 
-typedef struct s_reader
+typedef struct s_rdr
 {
 	char		*buf;
 	int			fd;
-	int			buf_len;
-	int			buf_pos;
+	int			len;
+	int			pos;
 	int			eof;
-	t_reader	*next;
-}	t_reader;
+	struct s_rdr	*next;
+}	t_rdr;
 
-char *get_next_line(int fd);
+char	*get_next_line(int fd);
+void	*ft_memcpy(void *s1, const void *s2, size_t n);
+size_t	ft_strlen(const char *str);
+char	*ft_strchr(const char *p, int ch);
 #endif
