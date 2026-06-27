@@ -6,57 +6,16 @@
 /*   By: smilch <smilch@student.42warsaw.pl>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/06/24 15:43:54 by smilch            #+#    #+#             */
-/*   Updated: 2026/06/26 20:52:25 by smilch           ###   ########.fr       */
+/*   Updated: 2026/06/26 22:14:55 by smilch           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "get_next_line.h"
 
-void	init_node(t_rdr *node, int fd, t_rdr **r_head, t_rdr *prev_node)
-{
-	node->fd = fd;
-	node->len = 0;
-	node->pos = 0;
-	node->eof = 0;
-	if (!*r_head)
-	{
-		node->next = node;
-		*r_head = node;
-	}
-	else
-	{
-		node->next = *r_head;
-		prev_node->next = node;
-	}
-}
-
-t_rdr	*get_rdr(t_rdr **r_head, int fd)
-{
-	t_rdr	*new_node;
-	t_rdr	*node;
-
-	node = *r_head;
-	while (node)
-	{
-		if (node->fd == fd)
-			return (node);
-		if (node->next == *r_head)
-			break ;
-		node = node->next;
-	}
-	new_node = (t_rdr *)malloc(sizeof(t_rdr));
-	if (!new_node)
-		return (NULL);
-	new_node->buf = (char *)malloc(sizeof(char) * BUFFER_SIZE);
-	if (!new_node->buf)
-	{
-		free(new_node);
-		return (NULL);
-	}
-	init_node(new_node, fd, r_head, node);
-	return (new_node);
-}
-
+// Handling the concatenation of many buffer reads without newline.
+// This function can return NULL if its called after read of 0.
+// If its only concatenated string or line we return what we have.
+// Otherwise we allocate memory for both and free what was copied.
 char	*copy_line(char *concat_line, char *line)
 {
 	char	*new_concat;
@@ -82,6 +41,11 @@ char	*copy_line(char *concat_line, char *line)
 	return (new_concat);
 }
 
+// Getting a line from node's buffer.
+// Calculate len of the line or of everything in buff if no \n
+// Allocate for the string with null termination.
+// Copy from buffer to string, terminate.
+// Adjust the position index if all was read set the len and pos to 0.
 char	*get_from_buf(t_rdr *rdr)
 {
 	char	*line;
@@ -106,22 +70,28 @@ char	*get_from_buf(t_rdr *rdr)
 	return (line);
 }
 
+// Reading to buffer - only if buffer is fully deplated.
+// If read is <0 eof or error, since the buffer is empty we free the node.
+// If it's the only node (point to itself) we set head to NULL.
+// If it's not the only node, but its head node - we set head to next node.
+// We set previous node to currents node next.
+// Finally we free the buffer and node itself.
+// No lose ends.
 t_rdr	*read_to_buf(t_rdr *rdr, t_rdr **r_head)
 {
 	t_rdr	*prev_node;
 
 	prev_node = rdr;
 	rdr->len = read(rdr->fd, rdr->buf, BUFFER_SIZE);
-	if (rdr->len <= 0) // we are in read mode so buffer is empty, if nothing to be read we free the node
+	if (rdr->len <= 0)
 	{
-		if (rdr->next == rdr) // means it is the only node in the list so we set head to null
+		if (rdr->next == rdr)
 			*r_head = NULL;
 		else if (rdr == *r_head)
 			*r_head = rdr->next;
-		while (prev_node->next != rdr) // find the previous node
+		while (prev_node->next != rdr)
 			prev_node = prev_node->next;
 		prev_node->next = rdr->next;
-		write(1, "free\n", 5);
 		free(rdr->buf);
 		free(rdr);
 		return (NULL);

@@ -6,7 +6,7 @@
 /*   By: smilch <smilch@student.42warsaw.pl>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/06/24 15:44:01 by smilch            #+#    #+#             */
-/*   Updated: 2026/06/25 19:29:10 by smilch           ###   ########.fr       */
+/*   Updated: 2026/06/26 22:19:46 by smilch           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,4 +44,56 @@ char	*ft_strchr(const char *p, int ch)
 			return ((char *)p);
 	}
 	return (NULL);
+}
+
+// Sets attributes to initial.
+// If its first node (no head) we point it to itself and set the head.
+// Otherwise we point the previous one to new one and the new one to head.
+void	init_node(t_rdr *node, int fd, t_rdr **r_head, t_rdr *prev_node)
+{
+	node->fd = fd;
+	node->len = 0;
+	node->pos = 0;
+	node->eof = 0;
+	if (!*r_head)
+	{
+		node->next = node;
+		*r_head = node;
+	}
+	else
+	{
+		node->next = *r_head;
+		prev_node->next = node;
+	}
+}
+
+// Check if we have given fd opened in our nodes.
+// If not - we at the same time get to the last node.
+// Allocate memory for new nodem and its buffer.
+// Init new node will fill the node and set its attributes.
+t_rdr	*get_rdr(t_rdr **r_head, int fd)
+{
+	t_rdr	*new_node;
+	t_rdr	*node;
+
+	node = *r_head;
+	while (node)
+	{
+		if (node->fd == fd)
+			return (node);
+		if (node->next == *r_head)
+			break ;
+		node = node->next;
+	}
+	new_node = (t_rdr *)malloc(sizeof(t_rdr));
+	if (!new_node)
+		return (NULL);
+	new_node->buf = (char *)malloc(sizeof(char) * BUFFER_SIZE);
+	if (!new_node->buf)
+	{
+		free(new_node);
+		return (NULL);
+	}
+	init_node(new_node, fd, r_head, node);
+	return (new_node);
 }
