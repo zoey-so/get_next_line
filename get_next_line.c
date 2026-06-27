@@ -6,7 +6,7 @@
 /*   By: smilch <smilch@student.42warsaw.pl>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/06/24 15:43:54 by smilch            #+#    #+#             */
-/*   Updated: 2026/06/26 22:14:55 by smilch           ###   ########.fr       */
+/*   Updated: 2026/06/27 18:06:00 by smilch           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -82,6 +82,8 @@ t_rdr	*read_to_buf(t_rdr *rdr, t_rdr **r_head)
 	t_rdr	*prev_node;
 
 	prev_node = rdr;
+	if (BUFFER_SIZE < 0)
+		return (NULL);
 	rdr->len = read(rdr->fd, rdr->buf, BUFFER_SIZE);
 	if (rdr->len <= 0)
 	{
@@ -124,8 +126,6 @@ char	*get_next_line(int fd)
 		}
 		rdr = read_to_buf(rdr, &r_head);
 		if (!rdr)
-		{
 			return (copy_line(concat_line, line));
-		}
 	}
 }

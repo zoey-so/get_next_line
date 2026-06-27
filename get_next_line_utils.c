@@ -6,7 +6,7 @@
 /*   By: smilch <smilch@student.42warsaw.pl>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/06/24 15:44:01 by smilch            #+#    #+#             */
-/*   Updated: 2026/06/26 22:19:46 by smilch           ###   ########.fr       */
+/*   Updated: 2026/06/27 18:07:31 by smilch           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -77,6 +77,8 @@ t_rdr	*get_rdr(t_rdr **r_head, int fd)
 	t_rdr	*node;
 
 	node = *r_head;
+	if (BUFFER_SIZE < 0)
+		return (NULL);
 	while (node)
 	{
 		if (node->fd == fd)

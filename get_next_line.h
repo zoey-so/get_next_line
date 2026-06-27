@@ -6,7 +6,7 @@
 /*   By: smilch <smilch@student.42warsaw.pl>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/06/24 15:43:59 by smilch            #+#    #+#             */
-/*   Updated: 2026/06/26 22:03:33 by smilch           ###   ########.fr       */
+/*   Updated: 2026/06/27 18:00:53 by smilch           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,13 +15,10 @@
 
 # include <stdlib.h>
 # include <unistd.h>
+# include <stdint.h>
 
 # ifndef BUFFER_SIZE
 #  define BUFFER_SIZE 2048
-# endif
-
-# if BUFFER_SIZE <= 0
-#  error "BUFFER_SIZE must be positive"
 # endif
 
 typedef struct s_rdr
