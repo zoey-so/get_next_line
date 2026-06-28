@@ -279,7 +279,6 @@ void test_stdin(void) {
 
 int main(void) {
     printf("=== GET_NEXT_LINE TESTS ===\n");
-    printf("BUFFER_SIZE = %d\n", BUFFER_SIZE);
 
     // Create test files
     // system("echo 'Hello\\nWorld\\n42' > test.txt");
