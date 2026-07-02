@@ -1,6 +1,6 @@
-# get_next_line
-
 *This project has been created as part of the 42 curriculum by smilch.*
+
+# get_next_line
 
 ## Description
 
@@ -296,7 +296,7 @@ close(fd2);
 
 ```bash
 # Compile with test file
-gcc -Wall -Wextra -Werror -D BUFFER_SIZE=42 main.c get_next_line.c get_next_line_utils.c -o gnl_test
+gcc -Wall -Wextra -Werror -D BUFFER_SIZE=42 tests.c get_next_line.c get_next_line_utils.c -o gnl_test
 
 # Run tests
 ./gnl_test
