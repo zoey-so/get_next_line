@@ -6,11 +6,11 @@
 /*   By: smilch <smilch@student.42warsaw.pl>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/06/24 15:43:54 by smilch            #+#    #+#             */
-/*   Updated: 2026/06/28 15:25:18 by smilch           ###   ########.fr       */
+/*   Updated: 2026/06/29 18:13:18 by smilch           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "get_next_line.h"
+#include "get_next_line_bonus.h"
 
 // Handling the concatenation of many buffer reads without newline.
 // This function can return NULL if its called after read of 0.
